@@ -24,9 +24,8 @@ function App() {
   const handleSpeak = () => {
     setSpeaking(true);
     const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
-    speech.voice = synth.getVoices()[2];
-
+    speech.voice = synth.getVoices().filter( voice => voice.lang === 'en-AU')[0];
+    
     speech.onboundary = (event) => {
       const currentIndex = charIndexMapping[event.charIndex];
       setHighlightedIndex(currentIndex);
