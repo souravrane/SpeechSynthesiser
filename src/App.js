@@ -22,6 +22,7 @@ function App() {
   const charIndexMapping = charIndexToWordMapping(text.split(" "));
 
   const handleSpeak = () => {
+    setSpeaking(true);
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-US";
     speech.voice = synth.getVoices()[2];
@@ -30,17 +31,19 @@ function App() {
       const currentIndex = charIndexMapping[event.charIndex];
       setHighlightedIndex(currentIndex);
     };
-    
+
     speech.onend = () => {
       setHighlightedIndex(-1);
       setSpeaking(false);
-    }
+    };
 
-    if (speaking) {
-      synth.cancel();
-    } else synth.speak(speech);
-    
-    setSpeaking(!speaking);
+    synth.speak(speech);
+  };
+
+  const handleCancel = () => {
+    synth.cancel();
+    setSpeaking(false);
+    setHighlightedIndex(-1);
   };
 
   return (
@@ -56,9 +59,17 @@ function App() {
         ))}
       </p>
       <div className="button-div">
-        <button onClick={handleSpeak}>{speaking ? 'Cancel' : 'Speak'}</button>
+        {!speaking ? (
+          <button onClick={handleSpeak}>Speak</button>
+        ) : (
+          <button onClick={handleCancel}>Cancel</button>
+        )}
       </div>
-      <p><a href="https://github.com/souravrane/SpeechSynthesiser">source-code</a></p>
+      <p>
+        <a href="https://github.com/souravrane/SpeechSynthesiser">
+          source-code
+        </a>
+      </p>
     </div>
   );
 }
