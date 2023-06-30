@@ -2,7 +2,7 @@ import "./App.css";
 import { useState } from "react";
 
 const text =
-  "You don't need to implement data structures like I said. They are already there in all languages. You just need to know why, how, when about it. Every software engineer must have good DS knowledge to write good code. D.S is just one of the basic things you need to know. Youll discover more things in your journey soon.";
+  "If the heroes run and hide, who will stay and fight ? When I was a little boy I wanted to be a hero. Not some damn business man. But a superhero who could send rotten villains flying with one punch.";
 const synth = window.speechSynthesis;
 const charIndexToWordMapping = (words) => {
   let index = 0;
@@ -24,11 +24,17 @@ function App() {
   const handleSpeak = () => {
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-US";
+    speech.voice = synth.getVoices()[2];
 
     speech.onboundary = (event) => {
       const currentIndex = charIndexMapping[event.charIndex];
       setHighlightedIndex(currentIndex);
     };
+    
+    speech.onend = () => {
+      setHighlightedIndex(-1);
+      setSpeaking(false);
+    }
 
     if (speaking) {
       synth.cancel();
@@ -52,6 +58,7 @@ function App() {
       <div className="button-div">
         <button onClick={handleSpeak}>{speaking ? 'Cancel' : 'Speak'}</button>
       </div>
+      <p><a href="https://github.com/souravrane/SpeechSynthesiser">source-code</a></p>
     </div>
   );
 }
